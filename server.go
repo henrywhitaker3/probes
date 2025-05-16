@@ -1,6 +1,9 @@
 package probes
 
-import "net/http"
+import (
+	"context"
+	"net/http"
+)
 
 type ServerOpts struct {
 	Addr   string
@@ -44,6 +47,14 @@ func NewServer(opts ServerOpts) *Server {
 	}
 
 	return s
+}
+
+func (s *Server) Start() error {
+	return s.server.ListenAndServe()
+}
+
+func (s *Server) Shutdown(ctx context.Context) error {
+	return s.server.Shutdown(ctx)
 }
 
 func (s *Server) healthy(w http.ResponseWriter, r *http.Request) {
